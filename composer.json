@@ -1,0 +1,24 @@
+{
+    "name": "ristekusdi/connector",
+    "description": "Connector for IMISSU2 Role Based Access Control",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "RistekUSDI\\Connector\\": "src/"
+        },
+        "files": [
+            "helpers.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Riset dan Teknologi USDI",
+            "email": "usdi@unud.ac.id"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^7.2.5|^8.0.2"
+    }
+}
