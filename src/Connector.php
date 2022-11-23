@@ -26,11 +26,11 @@ class Connector
             'header' => array(
                'Content-Type: application/x-www-form-urlencoded'
            ),
-           'body' => array(
+           'body' => http_build_query(array(
                'grant_type' => 'client_credentials',
                'client_id' => $this->clientId,
                'client_secret' => $this->client_secret,
-           ),
+           ), "", "&", PHP_QUERY_RFC3986),
         ), 'POST');
 
         if ($response['code'] === 200) {
