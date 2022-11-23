@@ -80,6 +80,48 @@ $total_users = (new Connector())->totalUsers(array(
 ));
 ```
 
+### Store user
+
+```php
+<?php
+
+use RistekUSDI\RBAC\Connector\Connector;
+
+/**
+ * Store user
+ * @param $data (user entity)
+*/
+(new Connector())->storeUser($data);
+```
+
+### Show user
+
+```php
+<?php
+
+use RistekUSDI\RBAC\Connector\Connector;
+
+/**
+ * Show user by username
+ * 
+ * */
+$user = (new Connector())->showUser($username);
+```
+
+### Update user
+
+```php
+<?php
+
+use RistekUSDI\RBAC\Connector\Connector;
+
+/**
+ * Update user by username
+ * @param $username, $data (user entity)
+ * */
+$user = (new Connector())->showUser($username, $data);
+```
+
 ### Assigned User to Client Role
 
 ```php

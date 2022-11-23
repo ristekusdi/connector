@@ -49,4 +49,48 @@ class User
 
         return ($response['code'] === 200) ? $response['body'] : 0;
     }
+
+    public function store($params = array())
+    {        
+        $url = "{$this->getHost()}/api/v1/users";
+        
+        $response = curl_request($url, array(
+            'header' => array(
+                "Authorization: Bearer {$this->getAccessToken()}",
+                'Content-Type: application/x-www-urlencoded'
+            ),
+            'body' => http_build_query($params, "", "&",  PHP_QUERY_RFC3986),
+        ), 'POST');
+
+        return ($response['code'] === 200) ? $response['body'] : 0;
+    }
+
+    public function show($username)
+    {        
+        $url = "{$this->getHost()}/api/v1/users/{$username}";
+        
+        $response = curl_request($url, array(
+            'header' => array(
+                "Authorization: Bearer {$this->getAccessToken()}",
+                'Content-Type: application/x-www-urlencoded'
+            )
+        ));
+
+        return ($response['code'] === 200) ? $response['body'] : 0;
+    }
+
+    public function update($username, $params = array())
+    {        
+        $url = "{$this->getHost()}/api/v1/users/{$username}";
+        
+        $response = curl_request($url, array(
+            'header' => array(
+                "Authorization: Bearer {$this->getAccessToken()}",
+                'Content-Type: application/x-www-urlencoded'
+            ),
+            'body' => http_build_query($params, "", "&",  PHP_QUERY_RFC3986),
+        ), 'PATCH');
+
+        return ($response['code'] === 200) ? $response['body'] : 0;
+    }
 }

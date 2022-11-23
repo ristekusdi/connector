@@ -65,6 +65,21 @@ class Connector
         return (new User($this->getHost(), $this->getAccessToken()))->get($params);
     }
 
+    public function storeUser($params = array())
+    {
+        return (new User($this->getHost(), $this->getAccessToken()))->store($params);
+    }
+
+    public function showUser($username)
+    {
+        return (new User($this->getHost(), $this->getAccessToken()))->show($username);
+    }
+
+    public function updateUser($username, $params = array())
+    {
+        return (new User($this->getHost(), $this->getAccessToken()))->update($username, $params);
+    }
+
     public function totalUsers($params = array())
     {   
         return (new User($this->getHost(), $this->getAccessToken()))->total($params);
