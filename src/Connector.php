@@ -28,7 +28,7 @@ class Connector
            ),
            'body' => array(
                'grant_type' => 'client_credentials',
-               'client_id' => $this->client_id,
+               'client_id' => $this->clientId,
                'client_secret' => $this->client_secret,
            ),
         ), 'POST');
