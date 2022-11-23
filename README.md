@@ -5,6 +5,7 @@ IMISSU2 RBAC Connector
 
 1. Your client type MUST BE confidential to get client secret.
 2. Enable Service Account in IMISSU2 to get data from RBAC Connector.
+3. Assign roles in Service Accounts tab in client page IMISSU2.
 
 **What is Service Account?**
 
