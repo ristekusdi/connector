@@ -1,15 +1,43 @@
 <?php
 
-namespace RistekUSDI\Connector;
+namespace RistekUSDI\RBAC\Connector;
+
+use RistekUSDI\RBAC\Connector\ClientRole;
+use RistekUSDI\RBAC\Connector\User;
+use RistekUSDI\RBAC\Connector\UserRole;
 
 class Connector
 {
-    private $host, $access_token;
+    private $host, $clientId, $client_secret, $access_token;
 
-    public function __construct($access_token)
+    public function __construct()
     {
-        $this->host = isset($_SERVER['CONNECTOR_HOST_URL']) ? $_SERVER['CONNECTOR_HOST_URL'] : 'http://localhost:8000';
-        $this->access_token = $access_token;
+        $this->host = $_SERVER['CONNECTOR_HOST_URL'];
+        $this->clientId = $_SERVER['SSO_CLIENT_ID'];
+        $this->client_secret = $_SERVER['SSO_CLIENT_SECRET'];
+
+        if (empty($this->host)) {
+            throw new \Exception("Please set CONNECTOR_HOST_URL", 422);
+        }
+
+        $url = "{$this->getHost()}/api/login";
+        
+        $response = curl_request($url, array(
+            'header' => array(
+               'Content-Type: application/x-www-form-urlencoded'
+           ),
+           'body' => array(
+               'grant_type' => 'client_credentials',
+               'client_id' => $this->client_id,
+               'client_secret' => $this->client_secret,
+           ),
+        ), 'POST');
+
+        if ($response['code'] === 200) {
+            $this->access_token = $response['body']['access_token'];
+        } else {
+            $this->access_token = '';
+        }
     }
 
     public function getHost()
@@ -22,6 +50,11 @@ class Connector
         return $this->clientId;
     }
 
+    public function getClientSecret()
+    {
+        return $this->client_secret;
+    }
+
     public function getAccessToken()
     {
         return $this->access_token;
@@ -29,93 +62,35 @@ class Connector
 
     public function getUsers($params = array())
     {
-        $query = isset($params) ? http_build_query($params) : '';
-        $url = "{$this->getHost()}/api/v1/users?{$query}";
-        
-        $response = curl_request($url, array(
-            'header' => array(
-                "Authorization: Bearer {$this->getAccessToken()}"
-            ),
-        ));
-        
-        return ($response['code'] === 200) ? $response['body']['data'] : [];
+        return (new User($this->getHost(), $this->getAccessToken()))->get($params);
     }
 
     public function totalUsers($params = array())
-    {        
-        $query = isset($params) ? http_build_query($params) : '';
-        $url = "{$this->getHost()}/api/v1/users/count?{$query}";
-        
-        $response = curl_request($url, array(
-            'header' => array(
-                "Authorization: Bearer {$this->getAccessToken()}"
-            ),
-        ));
-
-        return ($response['code'] === 200) ? $response['body'] : 0;
+    {   
+        return (new User($this->getHost(), $this->getAccessToken()))->total($params);
     }
 
     public function syncAssignedUserClientRoles($user_id, $clientId, $current_roles)
     {
-        $url = "{$this->getHost()}/api/v1/users/{$user_id}/clients/{$clientId}/roles";
-        
-        return curl_request($url, array(
-            'header' => array(
-                "Authorization: Bearer {$this->getAccessToken()}",
-                'Content-Type: application/json'
-            ),
-            'body' => json_encode(array(
-                'raw_current_roles' => $current_roles,
-                '_method' => 'PATCH'
-            )),
-        ), 'PATCH');
+        return (new UserRole($this->getHost(), $this->getAccessToken()))
+            ->getAssignedUserClientRoles($user_id, $clientId, $current_roles);
     }
 
     public function storeClientRole($clientId, $role_name)
     {
-        $url = "{$this->getHost()}/api/v1/clients/{$clientId}/roles";
-        
-        return curl_request($url, array(
-            'header' => array(
-                "Authorization: Bearer {$this->getAccessToken()}",
-                'Content-Type: application/json'
-            ),
-            'body' => json_encode(array(
-                'role_name' => $role_name,
-            )),
-        ), 'POST');
+        return (new ClientRole($this->getHost(), $this->getAccessToken()))
+            ->store($clientId, $role_name);
     }
 
     public function updateClientRoleName($clientId, $previous_role_name, $current_role_name)
     {
-        $url = "{$this->getHost()}/api/v1/clients/{$clientId}/roles";
-        
-        return curl_request($url, array(
-            'header' => array(
-                "Authorization: Bearer {$this->getAccessToken()}",
-                'Content-Type: application/json'
-            ),
-            'body' => json_encode(array(
-                'previous_role_name' => $previous_role_name,
-                'current_role_name' => $current_role_name,
-                '_method' => 'PATCH'
-            )),
-        ), 'PATCH');
+        return (new ClientRole($this->getHost(), $this->getAccessToken()))
+            ->updateRoleName($clientId, $previous_role_name, $current_role_name);
     }
 
     public function deleteClientRole($clientId, $role_name)
     {
-        $url = "{$this->getHost()}/api/v1/clients/{$clientId}/roles";
-        
-        return curl_request($url, array(
-            'header' => array(
-                "Authorization: Bearer {$this->getAccessToken()}",
-                'Content-Type: application/json'
-            ),
-            'body' => json_encode(array(
-                'role_name' => $role_name,
-                '_method' => 'DELETE'
-            )),
-        ), 'DELETE');
+        return (new ClientRole($this->getHost(), $this->getAccessToken()))
+            ->delete($clientId, $role_name);
     }
 }

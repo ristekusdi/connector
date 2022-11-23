@@ -1,14 +1,14 @@
 <?php
 
-namespace RistekUSDI\Connector\RBAC;
+namespace RistekUSDI\RBAC\Connector;
 
 class ClientRole
 {
     private $host, $access_token;
 
-    public function __construct($access_token)
+    public function __construct($host, $access_token)
     {
-        $this->host = isset($_SERVER['CONNECTOR_HOST_URL']) ? $_SERVER['CONNECTOR_HOST_URL'] : 'http://localhost:8000';
+        $this->host = $host;
         $this->access_token = $access_token;
     }
 
@@ -17,17 +17,16 @@ class ClientRole
         return $this->host;
     }
 
-    public function getClientId()
-    {
-        return $this->clientId;
-    }
-
     public function getAccessToken()
     {
         return $this->access_token;
     }
 
-    public function storeClientRole($clientId, $role_name)
+    /**
+     * Create a role in a client
+     * @param $clientId, $role_name
+     */
+    public function store($clientId, $role_name)
     {
         $url = "{$this->getHost()}/api/v1/clients/{$clientId}/roles";
         
@@ -42,7 +41,11 @@ class ClientRole
         ), 'POST');
     }
 
-    public function updateClientRoleName($clientId, $previous_role_name, $current_role_name)
+    /**
+     * Update role name in a client
+     * @param $clientId, $previous_role_name, $currernt_role_name
+     */
+    public function updateRoleName($clientId, $previous_role_name, $current_role_name)
     {
         $url = "{$this->getHost()}/api/v1/clients/{$clientId}/roles";
         
@@ -59,7 +62,11 @@ class ClientRole
         ), 'PATCH');
     }
 
-    public function deleteClientRole($clientId, $role_name)
+    /**
+     * Delete a role in a client
+     * @param $clientId, $role_name
+     */
+    public function delete($clientId, $role_name)
     {
         $url = "{$this->getHost()}/api/v1/clients/{$clientId}/roles";
         

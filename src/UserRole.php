@@ -1,14 +1,14 @@
 <?php
 
-namespace RistekUSDI\Connector\RBAC;
+namespace RistekUSDI\RBAC\Connector;
 
 class UserRole
 {
     private $host, $access_token;
 
-    public function __construct($access_token)
+    public function __construct($host, $access_token)
     {
-        $this->host = isset($_SERVER['CONNECTOR_HOST_URL']) ? $_SERVER['CONNECTOR_HOST_URL'] : 'http://localhost:8000';
+        $this->host = $host;
         $this->access_token = $access_token;
     }
 
@@ -16,12 +16,6 @@ class UserRole
     {
         return $this->host;
     }
-
-    public function getClientId()
-    {
-        return $this->clientId;
-    }
-
     public function getAccessToken()
     {
         return $this->access_token;

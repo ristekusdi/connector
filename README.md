@@ -1,24 +1,41 @@
-# Connector
-Connector for IMISSU2 Role Based Access Control
+# RBAC Connector
+IMISSU2 RBAC Connector
 
-# Setup
+## Requirements
 
-Create file `.env` and set value of `CONNECTOR_HOST_URL` with IMISSU2 website.
+1. Your client type MUST BE confidential to get client secret.
+2. Enable Service Account in IMISSU2 to get data from RBAC Connector.
+
+**What is Service Account?**
+
+> A service account is a special type of provider account (e.g. Google, Keycloak, etc) intended to represent a non-human user that needs to authenticate and be authorized to access data in provider APIs. 
+
+## Setup
+
+1. Create file `.env` and set value of `CONNECTOR_HOST_URL`, `SSO_CLIENT_ID`, and  `SSO_CLIENT_SECRET`.
 
 ```bash
 CONNECTOR_HOST_URL=<imissu2-website>
+SSO_CLIENT_ID=<imissu2-website>
+SSO_CLIENT_SECRET=<imissu2-website>
+```
+
+2. Install package with command below.
+
+```bash
+composer require ristekusdi/rbac-connector
 ```
 
 ## Common Use Cases
 
-So far, here are common use cases that you need to use this package.
+Here are common use cases that you need to use this package.
 
 ### Get Users and Total Users
 
 ```php
 <?php
 
-use RistekUSDI\Connector\RBAC\User as ConnectorRBACUser;
+use RistekUSDI\RBAC\Connector\Connector;
 
 /**
  * $users_raw return data type array of users with field id, firstName, lastName, email, username, and attributes.
@@ -33,12 +50,9 @@ use RistekUSDI\Connector\RBAC\User as ConnectorRBACUser;
  * - unud_user_type_id:1
  * - unud_user_type_id:2
  * - unud_user_type_id:3
- * 
- * The value of $access_token can be get with these command:
- * - Laravel framework: session()->get('_sso_token')['access_token']) 
- * - Non Laravel framework: $_SESSION['_sso_token']['access_token']
+ *
 */
-$users_raw = (new ConnectorRBACUser($access_token)->get(array(
+$users_raw = (new Connector())->getUsers(array(
     'first' => $start,
     'max' => $length,
     'search' => $search,
@@ -57,11 +71,8 @@ $users_raw = (new ConnectorRBACUser($access_token)->get(array(
  * - unud_user_type_id:2
  * - unud_user_type_id:3
  * 
- * The value of $access_token can be get with these command:
- * - Laravel framework: session()->get('_sso_token')['access_token']) 
- * - Non Laravel framework: $_SESSION['_sso_token']['access_token']
 */
-$total_users = (new ConnectorRBACUser($access_token)->total(array(
+$total_users = (new Connector())->totalUsers(array(
     'search' => $search,
     // key "q" is optional
     'q' => 'unud_user_type_id:2 unud_user_type_id:3'
@@ -73,7 +84,7 @@ $total_users = (new ConnectorRBACUser($access_token)->total(array(
 ```php
 <?php
 
-use RistekUSDI\Connector\RBAC\UserRole as ConnectorRBACUserRole;
+use RistekUSDI\RBAC\Connector\Connector;
 
 /**
  * $users_raw return data type array of users with field firstName, lastName, email, username, and attributes.
@@ -84,20 +95,16 @@ use RistekUSDI\Connector\RBAC\UserRole as ConnectorRBACUserRole;
  * $client_id = client_id from value $_SERVER['SSO_CLIENT_ID'] or config('sso.client_id')
  * $roles = array of role_name
  * 
- * 
- * The value of $access_token can be get with these command:
- * - Laravel framework: session()->get('_sso_token')['access_token']) 
- * - Non Laravel framework: $_SESSION['_sso_token']['access_token']
 */
-(new ConnectorRBACUserRole($access_token)->syncAssignedUserClientRoles($user_id, $client_id, $roles);
+(new Connector())->syncAssignedUserClientRoles($user_id, $client_id, $roles);
 ```
 
-### Create Role
+### Create a role in a client
 
 ```php
 <?php
 
-use RistekUSDI\Connector\RBAC\ClientRole as ConnectorRBACRole;
+use RistekUSDI\RBAC\Connector\Connector;
 
 /**
  * Store role into client.
@@ -106,43 +113,37 @@ use RistekUSDI\Connector\RBAC\ClientRole as ConnectorRBACRole;
  * 
  * $client_id = client_id from value $_SERVER['SSO_CLIENT_ID'] or config('sso.client_id')
  * $role_name = role name
- * 
- * The value of $access_token can be get with these command:
- * - Laravel framework: session()->get('_sso_token')['access_token']) 
- * - Non Laravel framework: $_SESSION['_sso_token']['access_token']
+ *
 */
-(new ConnectorRBACRole($access_token))->storeClientRole($client_id, $role_name);
+(new Connector())->storeClientRole($client_id, $role_name);
 ```
 
-### Update Role
+### Update role name in a client
 
 ```php
 <?php
 
-use RistekUSDI\Connector\RBAC\ClientRole as ConnectorRBACRole;
+use RistekUSDI\RBAC\Connector\Connector;
 
 /**
- * Update role client.
+ * Update role name in a client.
  * 
  * Parameters: client_id, previous_role_name, current_role_name. All parameters are required.
  * 
  * $client_id = client_id from value $_SERVER['SSO_CLIENT_ID'] or config('sso.client_id')
  * $previous_role_name = previous role name
  * $current_role_name = current role name
- * 
- * The value of $access_token can be get with these command:
- * - Laravel framework: session()->get('_sso_token')['access_token']) 
- * - Non Laravel framework: $_SESSION['_sso_token']['access_token']
+ *
 */
-(new ConnectorRBACRole($access_token))->updateClientRoleName($client_id, $previous_role_name, $current_role_name);
+(new Connector())->updateClientRoleName($client_id, $previous_role_name, $current_role_name);
 ```
 
-### Delete Role
+### Delete role from a client
 
 ```php
 <?php
 
-use RistekUSDI\Connector\RBAC\ClientRole as ConnectorRBACRole;
+use RistekUSDI\RBAC\Connector\Connector;
 
 /**
  * Delete role from client.
@@ -151,10 +152,7 @@ use RistekUSDI\Connector\RBAC\ClientRole as ConnectorRBACRole;
  * 
  * $client_id = client_id from value $_SERVER['SSO_CLIENT_ID'] or config('sso.client_id')
  * $role_name = role name
- * 
- * The value of $access_token can be get with these command:
- * - Laravel framework: session()->get('_sso_token')['access_token']) 
- * - Non Laravel framework: $_SESSION['_sso_token']['access_token']
+ *
 */
-(new ConnectorRBACRole($access_token))->deleteClientRole($client_id, $role_name);
+(new Connector())->deleteClientRole($client_id, $role_name);
 ```

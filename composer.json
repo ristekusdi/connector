@@ -1,11 +1,11 @@
 {
-    "name": "ristekusdi/connector",
-    "description": "Connector for IMISSU2 Role Based Access Control",
+    "name": "ristekusdi/rbac-connector",
+    "description": "IMISSU2 RBAC Connector",
     "type": "library",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "RistekUSDI\\Connector\\": "src/"
+            "RistekUSDI\\RBAC\\Connector\\": "src/"
         },
         "files": [
             "helpers.php"
