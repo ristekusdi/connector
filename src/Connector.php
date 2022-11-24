@@ -13,11 +13,19 @@ class Connector
     public function __construct()
     {
         $this->host = $_SERVER['CONNECTOR_HOST_URL'];
-        $this->clientId = $_SERVER['SSO_CLIENT_ID'];
-        $this->client_secret = $_SERVER['SSO_CLIENT_SECRET'];
+        $this->clientId = $_SERVER['KEYCLOAK_CLIENT_ID'];
+        $this->client_secret = $_SERVER['KEYCLOAK_CLIENT_SECRET'];
 
         if (empty($this->host)) {
             throw new \Exception("Please set CONNECTOR_HOST_URL", 422);
+        }
+
+        if (empty($this->clientId)) {
+            throw new \Exception("Please set KEYCLOAK_CLIENT_ID", 422);
+        }
+
+        if (empty($this->client_secret)) {
+            throw new \Exception("Please set KEYCLOAK_CLIENT_SECRET", 422);
         }
 
         $url = "{$this->getHost()}/api/login";
