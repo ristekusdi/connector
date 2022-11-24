@@ -85,10 +85,16 @@ class Connector
         return (new User($this->getHost(), $this->getAccessToken()))->total($params);
     }
 
+    public function getAssignedUserClientRoles($user_id, $clientId)
+    {
+        return (new UserRole($this->getHost(), $this->getAccessToken()))
+            ->getAssignedUserClientRoles($user_id, $clientId);
+    }
+
     public function syncAssignedUserClientRoles($user_id, $clientId, $current_roles)
     {
         return (new UserRole($this->getHost(), $this->getAccessToken()))
-            ->getAssignedUserClientRoles($user_id, $clientId, $current_roles);
+            ->syncAssignedUserClientRoles($user_id, $clientId, $current_roles);
     }
 
     public function storeClientRole($clientId, $role_name)
