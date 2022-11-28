@@ -14,10 +14,10 @@ IMISSU2 RBAC Connector with Keycloak.
 
 ## Setup
 
-1. Create file `.env` and set value of `CONNECTOR_HOST_URL`, `KEYCLOAK_CLIENT_ID`, and  `KEYCLOAK_CLIENT_SECRET`.
+1. Create file `.env` and set value of `RBAC_CONNECTOR_HOST_URL`, `KEYCLOAK_CLIENT_ID`, and  `KEYCLOAK_CLIENT_SECRET`.
 
 ```bash
-CONNECTOR_HOST_URL=<imissu2-website>
+RBAC_CONNECTOR_HOST_URL=<imissu2-website>
 KEYCLOAK_CLIENT_ID=<keycloak-client-id>
 KEYCLOAK_CLIENT_SECRET=<keycloak-client-secret>
 ```

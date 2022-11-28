@@ -12,7 +12,7 @@ class Connector
 
     public function __construct()
     {
-        $this->host = $_SERVER['CONNECTOR_HOST_URL'];
+        $this->host = $_SERVER['RBAC_CONNECTOR_HOST_URL'];
         $this->clientId = $_SERVER['KEYCLOAK_CLIENT_ID'];
         $this->client_secret = $_SERVER['KEYCLOAK_CLIENT_SECRET'];
 
