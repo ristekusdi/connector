@@ -136,7 +136,7 @@ use RistekUSDI\RBAC\Connector\Connector;
  * Params: user_id, client_id, and roles. All parameters are required.
  * 
  * $user_id = id of user NOT id_sso
- * $client_id = client_id from value $_SERVER['SSO_CLIENT_ID'] or config('sso.client_id')
+ * $client_id = client_id from value $_SERVER['KEYCLOAK_CLIENT_ID'] or config('sso.client_id')
  * $roles = array of role_name
  * 
 */
@@ -155,7 +155,7 @@ use RistekUSDI\RBAC\Connector\Connector;
  * 
  * Parameters: client_id, role_name. All parameters are required.
  * 
- * $client_id = client_id from value $_SERVER['SSO_CLIENT_ID'] or config('sso.client_id')
+ * $client_id = client_id from value $_SERVER['KEYCLOAK_CLIENT_ID'] or config('sso.client_id')
  * $role_name = role name
  *
 */
@@ -174,7 +174,7 @@ use RistekUSDI\RBAC\Connector\Connector;
  * 
  * Parameters: client_id, previous_role_name, current_role_name. All parameters are required.
  * 
- * $client_id = client_id from value $_SERVER['SSO_CLIENT_ID'] or config('sso.client_id')
+ * $client_id = client_id from value $_SERVER['KEYCLOAK_CLIENT_ID'] or config('sso.client_id')
  * $previous_role_name = previous role name
  * $current_role_name = current role name
  *
@@ -194,7 +194,7 @@ use RistekUSDI\RBAC\Connector\Connector;
  * 
  * Parameters: client_id, role_name. All parameters are required.
  * 
- * $client_id = client_id from value $_SERVER['SSO_CLIENT_ID'] or config('sso.client_id')
+ * $client_id = client_id from value $_SERVER['KEYCLOAK_CLIENT_ID'] or config('sso.client_id')
  * $role_name = role name
  *
 */
