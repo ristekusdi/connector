@@ -105,6 +105,12 @@ class Connector
             ->syncAssignedUserClientRoles($user_id, $clientId, $current_roles);
     }
 
+    public function getClientRoles($clientId, $roles = array())
+    {
+        return (new ClientRole($this->getHost(), $this->getAccessToken()))
+            ->get($clientId, $roles);
+    }
+
     public function storeClientRole($clientId, $role_name)
     {
         return (new ClientRole($this->getHost(), $this->getAccessToken()))
