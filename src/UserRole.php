@@ -35,7 +35,7 @@ class UserRole
         return ($response['code'] === 200) ? $response['body']['data'] : [];
     }
 
-    public function syncAssignedUserClientRoles($user_id, $clientId, $current_roles)
+    public function syncAssignedUserClientRoles($user_id, $clientId, $roles)
     {
         $url = "{$this->getHost()}/api/v1/users/{$user_id}/clients/{$clientId}/roles";
         
@@ -45,7 +45,7 @@ class UserRole
                 'Content-Type: application/json'
             ),
             'body' => json_encode(array(
-                'raw_current_roles' => $current_roles,
+                'roles' => $roles,
                 '_method' => 'PATCH'
             )),
         ), 'PATCH');
