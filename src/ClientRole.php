@@ -23,6 +23,28 @@ class ClientRole
     }
 
     /**
+     * Get list of roles in a client
+     * @param $clientId string (required)
+     * @param $roles array (optional)
+     */
+    public function get($clientId, $roles = array())
+    {
+        $query = !empty($roles) ? http_build_query(array(
+            'roles' => json_encode($roles)
+        )) : '';
+        $url = "{$this->getHost()}/api/v1/clients/{$clientId}/roles?{$query}";
+
+        $response = curl_request($url, array(
+            'header' => array(
+                "Authorization: Bearer {$this->getAccessToken()}",
+                'Content-Type: application/json'
+            )
+        ));
+        
+        return ($response['code'] === 200) ? $response['body']['data'] : [];
+    }
+
+    /**
      * Create a role in a client
      * @param $clientId, $role_name
      */
