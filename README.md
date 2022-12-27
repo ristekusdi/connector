@@ -131,7 +131,6 @@ $user = (new Connector())->showUser($username, $data);
 use RistekUSDI\RBAC\Connector\Connector;
 
 /**
- * $users_raw return data type array of users with field firstName, lastName, email, username, and attributes.
  * 
  * Params: user_id, client_id, and roles. All parameters are required.
  * 
@@ -141,6 +140,26 @@ use RistekUSDI\RBAC\Connector\Connector;
  * 
 */
 (new Connector())->syncAssignedUserClientRoles($user_id, $client_id, $roles);
+```
+
+### Get client roles
+
+```php
+<?php
+
+use RistekUSDI\RBAC\Connector\Connector;
+
+/**
+ * Get client roles.
+ * 
+ * @param $clientId string (required)
+ * @param $roles array (optional)
+ * 
+ * Note: $roles array come from your DB app.
+ * Example: $roles = ['Administrator', 'Mahasiswa', 'Dosen', 'Pegawai'];
+ *
+*/
+(new Connector())->getClientRoles($clientId, $roles = array());
 ```
 
 ### Create a role in a client
